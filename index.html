@@ -101,7 +101,7 @@ html.noscroll{overflow:hidden}
 .pnav.prev{left:0;width:35%}.pnav.next{right:0;width:65%}
 .player.end .pnav{display:none}
 .pcount{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + .8rem);left:0;right:0;text-align:center;color:var(--petal);font-size:.85rem;z-index:6;pointer-events:none}
-#cont{background:var(--rose);border-color:var(--rose);color:var(--night)}
+#cont{position:relative;z-index:7;background:var(--rose);border-color:var(--rose);color:var(--night)}
 
 /* Breathe */
 .breathe{min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2.2rem;padding:4rem 1.5rem}
@@ -263,7 +263,7 @@ function go(i) {
   clearTimeout(timer); if (!paused && !reduce && !end) timer = setTimeout(() => go(ci + 1), 8000);
   if (end) { $('cont').onclick = closeP; burst(); }
 }
-function closeP() { clearTimeout(timer); const fin = ci >= N; pl.classList.remove('on', 'end'); root.classList.remove('noscroll'); if (fin) document.querySelector('.ask').scrollIntoView({behavior: 'smooth'}); }
+function closeP() { clearTimeout(timer); const fin = ci >= N; pl.classList.remove('on', 'end'); root.classList.remove('noscroll'); if (fin) setTimeout(() => { const a = document.querySelector('.ask'); window.scrollTo({top: a.getBoundingClientRect().top + window.scrollY, behavior: 'smooth'}); }, 120); }
 $('play').onclick = () => { ps.innerHTML = ''; paused = false; $('ppause').textContent = '❚❚'; pl.classList.add('on'); root.classList.add('noscroll'); go(0); };
 $('pnext').onclick = () => go(ci + 1); $('pprev').onclick = () => go(ci - 1); $('pclose').onclick = closeP;
 $('ppause').onclick = () => { paused = !paused; $('ppause').textContent = paused ? '▶' : '❚❚'; clearTimeout(timer); if (!paused && ci < N) timer = setTimeout(() => go(ci + 1), 4000); };
